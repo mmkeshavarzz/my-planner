@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+        <!-- ── PWA: شناسنامه اپ ── -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#7C83FD">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="پلنر">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>پلنر هوشمند 2026</title>
+    
+    <!-- فونت وزیر -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css"></noscript>
+    
+    <style>
+        :root {
+            --bg-color: #F6F5F2;
+            --bg-secondary: #FFFEFA;
+            --text-color: #4a4a5a;
+            --text-muted: #8e8ea0;
+            --shadow-light: #ffffff;
+            --shadow-dark: rgba(174, 174, 191, 0.35);
+            --shadow-dark-strong: rgba(166, 166, 182, 0.45);
+            --pastel-purple: #B8A9E8;
+            --pastel-purple-deep: #9B8AD8;
+            --pastel-blue: #A8D8EA;
+            --pastel-blue-deep: #7EC8E3;
+            --pastel-pink: #F2B5D4;
+            --pastel-pink-deep: #E899C0;
+            --pastel-mint: #B5EAD7;
+            --pastel-mint-deep: #8DD5BB;
+            --pastel-peach: #FFD6A5;
+            --pastel-peach-deep: #FFBD73;
+            --pastel-yellow: #FFF1A8;
+            --pastel-yellow-deep: #FFE566;
+            --pastel-lavender: #E2D1F9;
+            --pastel-coral: #FFB5B5;
+            --pastel-sky: #BFECFF;
+            --accent-color: var(--pastel-purple-deep);
+            --useful-color: var(--pastel-blue-deep);
+            --glass-bg: rgba(255, 255, 255, 0.55);
+            --glass-bg-strong: rgba(255, 255, 255, 0.70);
+            --glass-border: rgba(255, 255, 255, 0.80);
+            --glass-blur: 20px;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(184, 169, 232, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(168, 216, 234, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(242, 181, 212, 0.05) 0%, transparent 50%);
+            color: var(--text-color);
+            font-family: 'Vazirmatn', sans-serif;
+            margin: 0;
+            padding: 40px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            box-sizing: border-box;
+            transition: background 0.5s;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            padding: 10px;
+            border-radius: 20px;
+            position: relative;
+            background: transparent;
+        }
+
+        .bento-box {
+            border-radius: 24px;
+            background: var(--glass-bg-strong);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            box-shadow: 
+                8px 8px 20px var(--shadow-dark),
+                -8px -8px 20px var(--shadow-light),
+                inset 0 1px 0 rgba(255,255,255,0.8);
+            padding: 25px;
+            border: 1px solid var(--glass-border);
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .bento-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                10px 10px 25px var(--shadow-dark-strong),
+                -8px -8px 20px var(--shadow-light),
+                inset 0 1px 0 rgba(255,255,255,0.9);
+        }
+
+        .clock-widget {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 25px 20px;
+            margin-bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(184, 169, 232, 0.15) 0%, 
+                rgba(168, 216, 234, 0.15) 50%, 
+                rgba(242, 181, 212, 0.10) 100%),
+                var(--glass-bg-strong);
+        }
+
+        .live-time {
+            font-size: 4.5em;
+            font-weight: 900;
+            color: var(--pastel-purple-deep);
+            text-shadow: 
+                2px 2px 4px rgba(155, 138, 216, 0.3),
+                0 0 30px rgba(184, 169, 232, 0.15);
+            font-variant-numeric: tabular-nums;
+            line-height: 1;
+            letter-spacing: 3px;
+            direction: ltr;
+        }
+
+        .live-date {
+            font-size: 1.4em;
+            color: var(--text-muted);
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .seconds-indicator {
+            font-size: 0.5em;
+            opacity: 0.5;
+            vertical-align: top;
+            margin-left: 10px;
+            color: var(--pastel-pink-deep);
+        }
+
+        h1 {
+            text-align: center;
+            margin: 0;
+            color: var(--pastel-purple-deep);
+            text-shadow: 1px 1px 3px rgba(155, 138, 216, 0.2);
+            font-size: 2em;
+        }
+
+        .league-display {
+            margin-top: 15px;
+            padding: 8px 18px;
+            border-radius: 16px;
+            font-weight: 900;
+            font-size: 1.2em;
+            text-align: center;
+            transition: all 0.5s ease;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 
+                inset 2px 2px 5px var(--shadow-dark),
+                inset -2px -2px 5px var(--shadow-light);
+            border: 1px solid rgba(255,255,255,0.6);
+            display: inline-block;
+            align-self: center;
+            width: fit-content;
+        }
+
+        .l5 { color: #D4A017; text-shadow: 0 0 15px rgba(212, 160, 23, 0.4); border-color: rgba(212, 160, 23, 0.3); background: linear-gradient(135deg, rgba(255,243,176,0.4), rgba(255,215,0,0.15)); }
+        .l4 { color: #5BCFCF; text-shadow: 0 0 10px rgba(91, 207, 207, 0.3); border-color: rgba(91, 207, 207, 0.3); background: linear-gradient(135deg, rgba(191,236,255,0.4), rgba(91,207,207,0.15)); }
+        .l3 { color: #E8A87C; border-color: rgba(232, 168, 124, 0.3); background: linear-gradient(135deg, rgba(255,214,165,0.4), rgba(232,168,124,0.15)); }
+        .l2 { color: #E8757C; border-color: rgba(232, 117, 124, 0.3); background: linear-gradient(135deg, rgba(255,181,181,0.4), rgba(232,117,124,0.15)); }
+        .l1 { color: #6DC9A0; border-color: rgba(109, 201, 160, 0.3); background: linear-gradient(135deg, rgba(181,234,215,0.4), rgba(109,201,160,0.15)); }
+        .l0 { color: #a0a0b0; opacity: 0.8; }
+
+        .neu-input {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: var(--bg-secondary);
+            border-radius: 14px;
+            padding: 12px;
+            font-family: 'Vazirmatn', sans-serif;
+            color: var(--text-color);
+            text-align: center;
+            font-size: 1.1em;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        .neu-input:disabled {
+            background: rgba(255,255,255,0.4);
+            box-shadow: none;
+            border: 1px solid rgba(255,255,255,0.5);
+            cursor: default;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .neu-input:not(:disabled) {
+            box-shadow: 
+                inset 4px 4px 8px var(--shadow-dark),
+                inset -4px -4px 8px var(--shadow-light);
+            color: var(--pastel-purple-deep);
+            background: var(--bg-secondary);
+            border: 1px solid rgba(184, 169, 232, 0.2);
+        }
+
+        .neu-input:not(:disabled):focus {
+            border-color: rgba(184, 169, 232, 0.5);
+            box-shadow: 
+                inset 4px 4px 8px var(--shadow-dark),
+                inset -4px -4px 8px var(--shadow-light),
+                0 0 0 3px rgba(184, 169, 232, 0.15);
+        }
+
+        .neu-input.i-useful:not(:disabled) {
+            color: var(--pastel-blue-deep);
+            background: rgba(168, 216, 234, 0.08);
+            border-color: rgba(168, 216, 234, 0.3);
+        }
+
+        .header-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 30px;
+            align-items: end;
+            background: linear-gradient(135deg,
+                rgba(226, 209, 249, 0.20) 0%,
+                rgba(191, 236, 255, 0.15) 50%,
+                rgba(242, 181, 212, 0.10) 100%),
+                var(--glass-bg-strong);
+        }
+
+        .info-card {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        label {
+            font-size: 1em;
+            color: var(--text-muted);
+            font-weight: 700;
+            padding-right: 5px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            padding: 5px;
+            border-radius: 24px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 12px;
+            min-width: 1250px;
+        }
+
+        th:nth-child(3), td:nth-child(3) { min-width: 85px; }
+        th:nth-child(4), td:nth-child(4) { min-width: 200px; }
+        th:nth-child(5), td:nth-child(5) { min-width: 160px; }
+        th:nth-child(6), td:nth-child(6) { min-width: 100px; }
+        th:nth-child(9), td:nth-child(9) { min-width: 50px; }
+        th:nth-child(11), td:nth-child(11) { min-width: 85px; }
+
+        thead th {
+            padding: 18px;
+            color: var(--text-color);
+            font-weight: 800;
+            font-size: 1.05em;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 2px solid rgba(184, 169, 232, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        thead th:first-child { border-top-right-radius: 16px; border-bottom-right-radius: 16px; }
+        thead th:last-child { border-top-left-radius: 16px; border-bottom-left-radius: 16px; }
+
+        tbody td {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 10px;
+            border-top: 1px solid rgba(255,255,255,0.7);
+            border-bottom: 1px solid rgba(174, 174, 191, 0.12);
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        tbody td:first-child { 
+            border-radius: 0 16px 16px 0; 
+            border-right: 1px solid rgba(255,255,255,0.7); 
+        }
+        tbody td:last-child { 
+            border-radius: 16px 0 0 16px; 
+            border-left: 1px solid rgba(255,255,255,0.7); 
+        }
+
+        tbody tr {
+            transition: transform 0.2s ease;
+        }
+        tbody tr:hover td {
+            background: rgba(184, 169, 232, 0.08);
+        }
+
+        .neu-btn {
+            border: none;
+            outline: none;
+            background: var(--glass-bg-strong);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--text-color);
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 
+                5px 5px 12px var(--shadow-dark),
+                -5px -5px 12px var(--shadow-light);
+            border: 1px solid rgba(255,255,255,0.6);
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 1em;
+        }
+
+        .neu-btn:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 
+                7px 7px 18px var(--shadow-dark-strong),
+                -5px -5px 12px var(--shadow-light);
+        }
+        .neu-btn:active {
+            box-shadow: 
+                inset 3px 3px 6px var(--shadow-dark),
+                inset -3px -3px 6px var(--shadow-light);
+            transform: translateY(1px);
+        }
+
+        .neu-btn.primary { color: var(--pastel-purple-deep); border-color: rgba(184, 169, 232, 0.3); }
+        .neu-btn.danger { color: var(--pastel-coral); font-size: 0.9em; padding: 8px 15px; box-shadow: 3px 3px 8px var(--shadow-dark), -3px -3px 8px var(--shadow-light); border-color: rgba(255, 181, 181, 0.3); }
+        .neu-btn.success { color: var(--pastel-mint-deep); border-color: rgba(181, 234, 215, 0.3); }
+        .neu-btn.warning { color: var(--pastel-peach-deep); border-color: rgba(255, 214, 165, 0.3); }
+        .neu-btn.pdf { color: var(--pastel-pink-deep); border-color: rgba(242, 181, 212, 0.3); }
+
+        .export-btn {
+            font-size: 1.2em;
+            padding: 15px 50px;
+            color: var(--text-color);
+            background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.5));
+        }
+
+        .export-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+            box-shadow: 
+                inset 2px 2px 4px var(--shadow-dark), 
+                inset -2px -2px 4px var(--shadow-light);
+        }
+
+        .action-cell {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .summary-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .summary-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 120px;
+        }
+
+        .summary-grid .bento-box:nth-child(1) {
+            background: linear-gradient(135deg, rgba(226,209,249,0.30), rgba(255,255,255,0.60));
+            border-color: rgba(184, 169, 232, 0.25);
+        }
+        .summary-grid .bento-box:nth-child(2) {
+            background: linear-gradient(135deg, rgba(191,236,255,0.30), rgba(255,255,255,0.60));
+            border-color: rgba(168, 216, 234, 0.25);
+        }
+        .summary-grid .bento-box:nth-child(3) {
+            background: linear-gradient(135deg, rgba(242,181,212,0.20), rgba(255,255,255,0.60));
+            border-color: rgba(242, 181, 212, 0.25);
+        }
+        .summary-grid .bento-box:nth-child(4) {
+            background: linear-gradient(135deg, rgba(181,234,215,0.25), rgba(255,255,255,0.60));
+            border-color: rgba(181, 234, 215, 0.25);
+        }
+
+        .summary-val {
+            font-size: 2em;
+            font-weight: 800;
+            color: var(--pastel-purple-deep);
+            margin-top: 10px;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+
+        .summary-label {
+            font-size: 0.85em;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        .percent-good { color: var(--pastel-mint-deep) !important; }
+        .percent-bad { color: var(--pastel-coral) !important; }
+        .useful-highlight { color: var(--pastel-blue-deep) !important; }
+        .hide-on-export { display: none !important; }
+
+        .multi-select-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .multi-select-display {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: var(--bg-secondary);
+            border-radius: 14px;
+            padding: 10px 8px;
+            font-family: 'Vazirmatn', sans-serif;
+            color: var(--text-color);
+            text-align: center;
+            font-size: 0.85em;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .multi-select-display.disabled {
+            background: rgba(255,255,255,0.4);
+            box-shadow: none;
+            border: 1px solid rgba(255,255,255,0.5);
+            cursor: default;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .multi-select-display:not(.disabled) {
+            box-shadow: 
+                inset 4px 4px 8px var(--shadow-dark),
+                inset -4px -4px 8px var(--shadow-light);
+            color: var(--pastel-purple-deep);
+            border: 1px solid rgba(184, 169, 232, 0.2);
+        }
+
+        .multi-select-display:not(.disabled):hover {
+            background: rgba(184, 169, 232, 0.06);
+            border-color: rgba(184, 169, 232, 0.35);
+        }
+
+        .multi-select-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            left: 0;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+            box-shadow: 
+                8px 8px 20px var(--shadow-dark-strong),
+                -4px -4px 12px var(--shadow-light);
+            border: 1px solid rgba(255,255,255,0.7);
+            padding: 10px;
+            z-index: 1000;
+            display: none;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .multi-select-dropdown.show {
+            display: block;
+        }
+
+        .multi-select-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 0.9em;
+        }
+
+        .multi-select-option:hover {
+            background: rgba(184, 169, 232, 0.12);
+        }
+
+        .multi-select-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--pastel-purple-deep);
+            cursor: pointer;
+        }
+
+        .multi-select-tag {
+            background: linear-gradient(135deg, var(--pastel-purple), var(--pastel-lavender));
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            white-space: nowrap;
+            box-shadow: 0 2px 4px rgba(155, 138, 216, 0.25);
+        }
+
+        .multi-select-placeholder {
+            color: #b0b0c0;
+            font-size: 0.9em;
+        }
+
+        /* ===== حالت خروجی (Export Mode) ===== */
+        body.export-mode {
+            background: transparent !important;
+            padding: 0 !important;
+            overflow: auto !important;
+            height: auto !important;
+        }
+
+        body.export-mode .container {
+            background: linear-gradient(135deg, 
+                #B8A9E8 0%, 
+                #A8D8EA 30%, 
+                #F2B5D4 60%, 
+                #B5EAD7 100%) !important;
+            padding: 40px !important;
+            margin: 0 !important;
+            width: max-content !important;
+            max-width: 100% !important;
+            min-height: 100% ;
+        }
+
+        body.export-mode .table-container {
+            overflow: visible !important;
+            max-height: none !important;
+            height: auto !important;
+        }
+
+        body.export-mode .bento-box {
+            background: rgba(255, 255, 255, 0.20) !important;
+            box-shadow: none !important;
+            border: 1px solid rgba(255, 255, 255, 0.30) !important;
+            color: #fff !important;
+            backdrop-filter: blur(16px) !important;
+            -webkit-backdrop-filter: blur(16px) !important;
+        }
+
+        body.export-mode h1,
+        body.export-mode label,
+        body.export-mode span,
+        body.export-mode th {
+            color: #fff !important;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15) !important;
+        }
+
+        body.export-mode .neu-input {
+            background: rgba(255, 255, 255, 0.22) !important;
+            color: #9B8AD8 !important;
+            border: 1px solid rgba(255, 255, 255, 0.35) !important;
+            box-shadow: none !important;
+            font-weight: 600 !important;
+        }
+
+        body.export-mode .summary-val {
+            color: #9B8AD8 !important;
+            text-shadow: 0 0 12px rgba(255,255,255,0.5) !important;
+        }
+
+        body.export-mode tbody td {
+            background: rgba(255, 255, 255, 0.10) !important;
+            border-color: rgba(255,255,255,0.2) !important;
+            color: #1a1a2e !important;
+            backdrop-filter: none !important;
+        }
+
+        body.export-mode thead th {
+            background-color: rgba(255, 255, 255, 0.15) !important;
+            color: #fff !important;
+        }
+
+        body.export-mode .multi-select-display {
+            background: rgba(255, 255, 255, 0.22) !important;
+            color: #1a1a2e !important;
+            border: 1px solid rgba(255, 255, 255, 0.35) !important;
+            box-shadow: none !important;
+        }
+
+        body.export-mode .multi-select-tag {
+            background: rgba(255, 255, 255, 0.30) !important;
+            color: #9B8AD8 !important;
+            font-weight: 600 !important;
+        }
+
+        body.export-mode .summary-label {
+            color: rgba(255,255,255,0.7) !important;
+        }
+
+        body.export-mode .league-display {
+            background: rgba(255, 255, 255, 0.22) !important;
+            box-shadow: none !important;
+            color: #fff !important;
+            border-color: rgba(255,255,255,0.5) !important;
+        }
+
+        @media screen and (max-width: 768px) {
+            body { padding: 15px; }
+            .container { gap: 15px; }
+            .header-grid { grid-template-columns: 1fr; gap: 15px; }
+            .live-time { font-size: 2.8em; }
+            .live-date { font-size: 1.1em; }
+            .summary-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+            .summary-grid-3 { grid-template-columns: 1fr; gap: 15px; }
+            .summary-val { font-size: 1.4em; }
+            .add-btn-container { flex-direction: column; width: 100%; }
+            .add-btn-container button { width: 100%; margin-bottom: 10px; }
+            .bento-box { padding: 15px; }
+            .table-container::after {
+                content: '⬅️ برای مشاهده کامل جدول بکشید ➡️';
+                display: block; text-align: center; font-size: 0.8em; color: var(--text-muted);
+                margin-top: 10px; opacity: 0.8;
+            }
+            .export-container { flex-direction: column; gap: 15px; }
+            .export-btn { width: 100%; font-size: 1em; padding: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="captureArea">
+    
+    <!-- ساعت -->
+    <div class="bento-box clock-widget">
+        <div class="live-time" id="clockDisplay">00:00<span class="seconds-indicator">00</span></div>
+        <div class="live-date" id="dateDisplay">---</div>
+    </div>
+
+    <!-- هدر -->
+    <div class="bento-box header-grid">
+        <div class="info-card">
+            <h1>🗓️ پلنر هوشمند</h1>
+            <div id="league-badge" class="league-display l0">🥔 سیاهی لشکر</div>
+        </div>
+        
+        <div class="info-card"><label>تاریخ امروز</label><input type="text" id="h-date" class="neu-input" placeholder="۱۴۰۴/۱۰/۰۴" onchange="saveData()"></div>
+        <div class="info-card"><label>ساعت بیداری ☀️</label><input type="time" id="h-wake" class="neu-input" onchange="calculateSummary(); saveData()"></div>
+        <div class="info-card"><label>ساعت خواب 🌙</label><input type="time" id="h-sleep" class="neu-input" onchange="saveData()"></div>
+    </div>
+
+    <!-- جدول -->
+    <div class="bento-box table-container">
+        <table id="studyTable">
+            <thead>
+                <tr>
+                    <th style="width: 6%;">شروع</th> 
+                    <th style="width: 6%;">پایان</th>
+                    <th style="width: 8%; color: var(--useful-color);">مفید (m)</th>
+                    <th style="width: 16%;">مبحث</th> 
+                    <th style="width: 14%;">منبع</th>
+                    <th style="width: 9%;">نوع مطالعه</th>
+                    <th style="width: 5%;">تعداد</th> 
+                    <th style="width: 5%;">صحیح</th>
+                    <th style="width: 5%;">غلط</th> 
+                    <th style="width: 5%;">نزده</th>
+                    <th style="width: 7%;">درصد</th>
+                    <th style="width: 12%;" class="action-column">عملیات</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        
+        <div style="margin-top: 25px; display: flex; justify-content: center; gap: 20px;" class="add-btn-container">
+            <button class="neu-btn primary" onclick="addNewRow()"><span>➕</span> افزودن ردیف جدید</button>
+            <button class="neu-btn warning" onclick="clearAllData()"><span>🗑️</span> ریست کل برنامه</button>
+        </div>
+    </div>
+
+    <!-- خلاصه -->
+    <div class="summary-grid">
+        <div class="bento-box summary-item"><span>مجموع ساعت مطالعه</span><span class="summary-val" id="total-time">00:00</span></div>
+        <div class="bento-box summary-item"><span style="color: var(--useful-color); font-weight: bold;">ساعت مفید خالص</span><span class="summary-val useful-highlight" id="total-useful">00:00</span></div>
+        <div class="bento-box summary-item"><span>مجموع تست</span><span class="summary-val" id="total-tests">0</span></div>
+        <div class="bento-box summary-item"><span>میانگین درصد</span><span class="summary-val" id="avg-percent">0%</span></div>
+    </div>
+
+    <!-- شاخص‌های تحلیلی -->
+    <div class="summary-grid"> 
+        <div class="bento-box summary-item">
+            <span>🚀 TDR: چگالی تست</span>
+            <span class="summary-val" id="tdr-val">0</span>
+            <span class="summary-label">تست در دقیقه مفید</span>
+        </div>
+        <div class="bento-box summary-item">
+            <span>⚡ TPR: سرعت تست</span>
+            <span class="summary-val" id="tpr-val">0</span>
+            <span class="summary-label">دقیقه مفید به ازای هر تست</span>
+        </div>
+        <div class="bento-box summary-item">
+            <span>🧩 AER: تنوع دروس</span>
+            <span class="summary-val" id="aer-val">0</span>
+            <span class="summary-label">درس متفاوت</span>
+        </div>
+        <div class="bento-box summary-item">
+            <span>⚖️ نسبت اختصاصی/عمومی</span>
+            <span class="summary-val" id="sg-ratio">0:0</span>
+            <span class="summary-label">بر اساس دقیقه مفید</span>
+        </div>
+    </div>
+
+    <!-- خروجی -->
+    <div class="export-container" style="display: flex; justify-content: center; margin-top: 10px; gap: 15px; flex-direction: column; align-items: center;">
+        <div style="display:flex; gap: 15px; width: 100%;">
+            <button id="jpgBtn" class="neu-btn export-btn" style="width: 50%;" onclick="takeScreenshot()">📸 دریافت تصویر (JPG)</button>
+            <button id="pdfBtn" class="neu-btn export-btn pdf" style="width: 50%;" onclick="exportPDF()">📄 دریافت PDF</button>
+        </div>
+        <div style="font-size: 0.8em; color: #666; text-align: center; margin-top: 5px;">
+           ⚠️ اگر فایل دانلودی ناقص بود یا کار نکرد، <a href="#" onclick="showOfflineGuide(); return false;" style="color: var(--accent-color);">راهنمای حالت آفلاین</a> را بخوانید.
+        </div>
+    </div>
+
+</div>
+
+<script defer>
+    const SCRIPT_URLS = {
+        html2canvas: [
+            'html2canvas.min.js',
+            'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
+            'https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js'
+        ],
+        html2pdf: [
+            'html2pdf.bundle.min.js',
+            'https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js',
+            'https://unpkg.com/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js'
+        ]
+    };
+    let scriptsLoaded = { html2canvas: false, html2pdf: false };
+
+    const STUDY_TYPE_OPTIONS = [
+        { value: 'مطالعه', emoji: '📚' },
+        { value: 'تست', emoji: '📝' },
+        { value: 'تشریحی', emoji: '📖' },
+        { value: 'مرور', emoji: '🔄' },
+        { value: 'خلاصه‌نویسی', emoji: '✍️' },
+        { value: 'حفظ', emoji: '🧠' },
+        { value: 'فیلم', emoji: '🎬' },
+        { value: 'کلاس', emoji: '👨‍🏫' },
+        { value: 'پادکست', emoji: '🎧' }
+    ];
+
+    // ===== 🚀 PERFORMANCE: Debounce utility =====
+    function debounce(fn, delay) {
+        let timer;
+        return function(...args) {
+            clearTimeout(timer);
+            timer = setTimeout(() => fn.apply(this, args), delay);
+        };
+    }
+
+    const debouncedSave = debounce(saveData, 400);
+    const debouncedCalculateSummary = debounce(calculateSummary, 300);
+    const debouncedCalcRowStats = debounce(function(input) {
+        calcRowStats(input);
+    }, 200);
+
+    function loadScript(key) {
+        return new Promise((resolve, reject) => {
+            if (scriptsLoaded[key]) { resolve(); return; }
+            const urls = SCRIPT_URLS[key];
+            let index = 0;
+            function tryNext() {
+                if (index >= urls.length) { reject("همه لینک‌ها فیلتر هستن داداش! فایل‌ها رو دستی دانلود کن."); return; }
+                const script = document.createElement('script');
+                script.src = urls[index];
+                script.onload = () => { scriptsLoaded[key] = true; resolve(); };
+                script.onerror = () => { console.log(`لینک ${urls[index]} کار نکرد. بعدی...`); index++; tryNext(); };
+                document.head.appendChild(script);
+            }
+            tryNext();
+        });
+    }
+
+    function showOfflineGuide() {
+        alert("راهنمای آفلاین:\n۱. توی گوگل سرچ کن 'download html2canvas min js' و فایل رو دانلود کن.\n۲. سرچ کن 'download html2pdf bundle min js' و اونم دانلود کن.\n۳. اسم فایل‌ها رو دقیقا بذار html2canvas.min.js و html2pdf.bundle.min.js\n۴. بذارشون کنار همین فایل HTML.\nتمام! حالا بدون اینترنت هم کار می‌کنه.");
+    }
+
+    // ===== 🚀 PERFORMANCE: Optimized clock =====
+    function startLiveClock() {
+        const timeEl = document.getElementById('clockDisplay');
+        const dateEl = document.getElementById('dateDisplay');
+        const dateFormatter = new Intl.DateTimeFormat('fa-IR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        let _lastClockHTML = '';
+        let _lastDateText = '';
+        function update() {
+            const now = new Date();
+            let h = now.getHours(); let m = now.getMinutes(); let s = now.getSeconds();
+            h = h < 10 ? '0' + h : h; m = m < 10 ? '0' + m : m; s = s < 10 ? '0' + s : s;
+            const clockHTML = `${h}:${m}<span class="seconds-indicator">${s}</span>`;
+            if (clockHTML !== _lastClockHTML) {
+                _lastClockHTML = clockHTML;
+                timeEl.innerHTML = clockHTML;
+            }
+            const dateText = dateFormatter.format(now);
+            if (dateText !== _lastDateText) {
+                _lastDateText = dateText;
+                dateEl.innerText = dateText;
+            }
+        }
+        update(); setInterval(update, 1000);
+    }
+
+    function createMultiSelect(selectedValues = []) {
+        const container = document.createElement('div');
+        container.className = 'multi-select-container';
+        const display = document.createElement('div');
+        display.className = 'multi-select-display disabled';
+        display.setAttribute('data-values', JSON.stringify(selectedValues));
+        updateMultiSelectDisplay(display, selectedValues);
+        const dropdown = document.createElement('div');
+        dropdown.className = 'multi-select-dropdown';
+        STUDY_TYPE_OPTIONS.forEach(option => {
+            const optionEl = document.createElement('label');
+            optionEl.className = 'multi-select-option';
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = option.value;
+            checkbox.checked = selectedValues.includes(option.value);
+            checkbox.onchange = function() {
+                const currentValues = JSON.parse(display.getAttribute('data-values') || '[]');
+                if (this.checked) { if (!currentValues.includes(option.value)) { currentValues.push(option.value); } }
+                else { const idx = currentValues.indexOf(option.value); if (idx > -1) currentValues.splice(idx, 1); }
+                display.setAttribute('data-values', JSON.stringify(currentValues));
+                updateMultiSelectDisplay(display, currentValues);
+                debouncedSave();
+            };
+            optionEl.appendChild(checkbox);
+            optionEl.appendChild(document.createTextNode(` ${option.emoji} ${option.value}`));
+            dropdown.appendChild(optionEl);
+        });
+        display.onclick = function(e) {
+            if (this.classList.contains('disabled')) return;
+            e.stopPropagation();
+            closeAllDropdowns();
+            dropdown.classList.toggle('show');
+        };
+        container.appendChild(display);
+        container.appendChild(dropdown);
+        return container;
+    }
+
+    function updateMultiSelectDisplay(display, values) {
+        display.innerHTML = '';
+        if (values.length === 0) {
+            const placeholder = document.createElement('span');
+            placeholder.className = 'multi-select-placeholder';
+            placeholder.textContent = 'انتخاب کنید...';
+            display.appendChild(placeholder);
+        } else {
+            values.forEach(val => {
+                const option = STUDY_TYPE_OPTIONS.find(o => o.value === val);
+                const tag = document.createElement('span');
+                tag.className = 'multi-select-tag';
+                tag.textContent = option ? `${option.emoji} ${val}` : val;
+                display.appendChild(tag);
+            });
+        }
+    }
+
+    function closeAllDropdowns() {
+        document.querySelectorAll('.multi-select-dropdown.show').forEach(d => d.classList.remove('show'));
+    }
+
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.multi-select-container')) { closeAllDropdowns(); }
+    });
+
+    function addNewRow(rowData = null) {
+        const table = document.getElementById("studyTable").getElementsByTagName('tbody')[0];
+        const newRow = table.insertRow();
+        let v = { start: '', end: '', useful: '', subject: '', source: '', studyType: [], total: '', correct: '', wrong: '', unanswered: '0', percent: '---' };
+        if (rowData) {
+            v = { ...v, ...rowData };
+            if (typeof v.studyType === 'string') { v.studyType = v.studyType ? [v.studyType] : []; }
+        }
+        newRow.innerHTML = `
+            <td><input type="time" class="neu-input i-start" disabled value="${v.start}" onchange="debouncedCalculateSummary()"></td>
+            <td><input type="time" class="neu-input i-end" disabled value="${v.end}" onchange="debouncedCalculateSummary()"></td>
+            <td><input type="number" class="neu-input i-useful" disabled value="${v.useful}" placeholder="min" onchange="debouncedCalculateSummary()"></td>
+            <td><input type="text" class="neu-input i-subject" disabled value="${v.subject}" placeholder="مبحث" onchange="debouncedCalculateSummary()"></td>
+            <td><input type="text" class="neu-input i-source" disabled value="${v.source}" placeholder="منبع"></td>
+            <td class="study-type-cell"></td>
+            <td><input type="number" class="neu-input t-total" disabled value="${v.total}" placeholder="0" oninput="debouncedCalcRowStats(this)"></td>
+            <td><input type="number" class="neu-input t-correct" disabled value="${v.correct}" placeholder="0" oninput="debouncedCalcRowStats(this)"></td>
+            <td><input type="number" class="neu-input t-wrong" disabled value="${v.wrong}" placeholder="0" oninput="debouncedCalcRowStats(this)"></td>
+            <td><input type="text" class="neu-input t-unanswered" disabled readonly value="${v.unanswered}"></td>
+            <td><input type="text" class="neu-input t-percent" disabled readonly value="${v.percent}"></td>
+            <td class="action-cell action-column"><button class="neu-btn success btn-edit" onclick="toggleEditRow(this)">✎</button><button class="neu-btn danger" onclick="deleteRow(this)">🗑</button></td>`;
+        const studyTypeCell = newRow.querySelector('.study-type-cell');
+        const multiSelect = createMultiSelect(v.studyType);
+        studyTypeCell.appendChild(multiSelect);
+        if (!rowData) toggleEditRow(newRow.querySelector('.btn-edit'));
+        if (rowData) {
+            const pVal = parseFloat(v.percent); const pEl = newRow.querySelector('.t-percent');
+            if (!isNaN(pVal)) { if(pVal > 50) pEl.classList.add('percent-good'); if(pVal < 0) pEl.classList.add('percent-bad'); }
+        }
+    }
+
+    function toggleEditRow(btn) {
+        const row = btn.closest('tr');
+        const inputs = row.querySelectorAll('input:not([readonly])');
+        const multiSelectDisplay = row.querySelector('.multi-select-display');
+        if (btn.innerHTML.includes("✎")) {
+            inputs.forEach(input => input.disabled = false);
+            if (multiSelectDisplay) multiSelectDisplay.classList.remove('disabled');
+            btn.innerHTML = "💾";
+            btn.classList.remove('success'); btn.classList.add('primary'); inputs[0].focus();
+        } else {
+            inputs.forEach(input => input.disabled = true);
+            if (multiSelectDisplay) multiSelectDisplay.classList.add('disabled');
+            closeAllDropdowns();
+            btn.innerHTML = "✎";
+            btn.classList.remove('primary'); btn.classList.add('success'); calculateSummary(); saveData();
+        }
+    }
+
+    function deleteRow(btn) { if(confirm("حذف بشه؟")) { btn.closest('tr').remove(); calculateSummary(); saveData(); } }
+
+    function calcRowStats(input) {
+        const row = input.closest('tr'); const total = parseFloat(row.querySelector('.t-total').value) || 0;
+        const correct = parseFloat(row.querySelector('.t-correct').value) || 0;
+        const wrong = parseFloat(row.querySelector('.t-wrong').value) || 0;
+        const unanswered = total - (correct + wrong); const unEl = row.querySelector('.t-unanswered');
+        unEl.value = unanswered; unEl.style.color = unanswered < 0 ? "red" : "var(--text-color)";
+        const perEl = row.querySelector('.t-percent');
+        if(total > 0) {
+            const percent = ((correct * 3) - wrong) / (total * 3) * 100;
+            perEl.value = percent.toFixed(1) + '%'; perEl.classList.remove('percent-good', 'percent-bad');
+            if(percent > 50) perEl.classList.add('percent-good'); if(percent < 0) perEl.classList.add('percent-bad');
+        } else { perEl.value = '---'; }
+        calculateSummary();
+    }
+
+    function calculateSummary() {
+        let totalMins = 0, totalUsefulMins = 0, sumTests = 0, percentSum = 0, percentCount = 0;
+        const subjects = new Set();
+        let specMins = 0; let genMins = 0;
+        const specList = ['زیست', 'فیزیک', 'شیمی', 'ریاضی', 'زمین'];
+        const genList = ['ادبیات', 'دینی', 'عربی', 'زبان انگلیسی', 'هویت اجتماعی', 'سلامت و بهداشت'];
+        document.querySelectorAll('#studyTable tbody tr').forEach(row => {
+            const start = row.querySelector('.i-start').value; const end = row.querySelector('.i-end').value;
+            if(start && end) {
+                const sDate = new Date("2000-01-01 " + start); const eDate = new Date("2000-01-01 " + end);
+                let diff = (eDate - sDate) / 60000; if(diff < 0) diff += 1440; totalMins += diff;
+            }
+            const useful = parseFloat(row.querySelector('.i-useful').value) || 0;
+            totalUsefulMins += useful;
+            sumTests += parseFloat(row.querySelector('.t-total').value) || 0;
+            const pValStr = row.querySelector('.t-percent').value; const pVal = parseFloat(pValStr);
+            if(pValStr !== '---' && !isNaN(pVal)) { percentSum += pVal; percentCount++; }
+            const subject = row.querySelector('.i-subject').value.trim();
+            if (subject) {
+                subjects.add(subject);
+                if (specList.some(s => subject.includes(s))) { specMins += useful; }
+                else if (genList.some(g => subject.includes(g))) { genMins += useful; }
+            }
+        });
+        const h = Math.floor(totalMins / 60); const m = Math.round(totalMins % 60);
+        document.getElementById('total-time').innerText = `${h}:${m.toString().padStart(2, '0')}`;
+        const uh = Math.floor(totalUsefulMins / 60); const um = Math.round(totalUsefulMins % 60);
+        document.getElementById('total-useful').innerText = `${uh}:${um.toString().padStart(2, '0')}`;
+        document.getElementById('total-tests').innerText = sumTests;
+        const avg = percentCount > 0 ? (percentSum / percentCount).toFixed(1) : 0;
+        document.getElementById('avg-percent').innerText = avg + '%';
+        const tdrVal = totalUsefulMins > 0 ? (sumTests / totalUsefulMins).toFixed(2) : 0;
+        document.getElementById('tdr-val').innerText = tdrVal;
+        const tprVal = sumTests > 0 ? (totalUsefulMins / sumTests).toFixed(1) : 0;
+        document.getElementById('tpr-val').innerText = tprVal;
+        document.getElementById('aer-val').innerText = subjects.size;
+        let ratioText = "0:0"; let rawRatio = 0;
+        if (genMins > 0) { const ratio = specMins / genMins; rawRatio = ratio; const cleanRatio = Number.isInteger(ratio) ? ratio : ratio.toFixed(1); ratioText = `${cleanRatio}:1`; }
+        else if (specMins > 0) { ratioText = `${specMins}:0`; rawRatio = 5; }
+        document.getElementById('sg-ratio').innerText = ratioText;
+        updateLeague({ useful: totalUsefulMins, tests: sumTests, tdr: parseFloat(tdrVal), tpr: parseFloat(tprVal), aer: subjects.size, ratio: rawRatio, wake: document.getElementById('h-wake').value });
+    }
+
+    function updateLeague(data) {
+        const el = document.getElementById('league-badge');
+        let s_time = 0;
+        if (data.useful >= 700) s_time = 5; else if (data.useful >= 615) s_time = 4; else if (data.useful >= 525) s_time = 3; else if (data.useful >= 420) s_time = 2; else if (data.useful > 0) s_time = 1;
+        let s_test = 0;
+        if (data.tests >= 235) s_test = 5; else if (data.tests >= 185) s_test = 4; else if (data.tests >= 145) s_test = 3; else if (data.tests >= 100) s_test = 2; else if (data.tests >= 60) s_test = 1;
+        let s_tdr = 0;
+        if (data.tdr >= 0.33) s_tdr = 5; else if (data.tdr >= 0.30) s_tdr = 4; else if (data.tdr >= 0.27) s_tdr = 3; else if (data.tdr >= 0.24) s_tdr = 2; else if (data.tdr >= 0.14) s_tdr = 1;
+        let s_tpr = 0;
+        if (data.tpr > 0) { if (data.tpr <= 3.0) s_tpr = 5; else if (data.tpr <= 3.34) s_tpr = 4; else if (data.tpr <= 3.71) s_tpr = 3; else if (data.tpr <= 4.2) s_tpr = 2; else if (data.tpr <= 7.2) s_tpr = 1; }
+        let s_aer = 0;
+        if (data.aer >= 6) s_aer = 5; else if (data.aer >= 5) s_aer = 4; else if (data.aer >= 4) s_aer = 3; else if (data.aer >= 3) s_aer = 2; else if (data.aer >= 1) s_aer = 1;
+        let s_ratio = 0;
+        if (data.ratio >= 4) s_ratio = 5; else if (data.ratio >= 3) s_ratio = 4; else if (data.ratio >= 2) s_ratio = 3; else if (data.ratio >= 1) s_ratio = 2; else if (data.ratio >= 0.5) s_ratio = 1;
+        let s_sleep = 0;
+        if (data.wake) { let [h, m] = data.wake.split(':').map(Number); let wakeMins = h * 60 + m; if (wakeMins <= 390) s_sleep = 5; else if (wakeMins <= 420) s_sleep = 4; else if (wakeMins <= 450) s_sleep = 3; else if (wakeMins <= 480) s_sleep = 2; else s_sleep = 1; }
+        let totalScore = s_time + s_test + s_tdr + s_tpr + s_aer + s_ratio + s_sleep;
+        let average = totalScore / 7;
+        let league = { title: "🥔 سیاهی لشکر", class: "l0" };
+        if (average >= 5) { league = { title: "👑 خدایان", class: "l5" }; }
+        else if (average >= 4) { league = { title: "🦸 قهرمانان", class: "l4" }; }
+        else if (average >= 3) { league = { title: "🦅 شکارچیان", class: "l3" }; }
+        else if (average >= 2) { league = { title: "⚔️ جنگجویان", class: "l2" }; }
+        else if (average >= 1) { league = { title: "🌱 تازه‌واردان", class: "l1" }; }
+        el.innerText = league.title;
+        el.className = 'league-display ' + league.class;
+    }
+
+    function saveData() {
+        const headerData = { date: document.getElementById('h-date').value, wake: document.getElementById('h-wake').value, sleep: document.getElementById('h-sleep').value };
+        const rowsData = [];
+        document.querySelectorAll('#studyTable tbody tr').forEach(row => {
+            const multiSelectDisplay = row.querySelector('.multi-select-display');
+            const studyTypeValues = multiSelectDisplay ? JSON.parse(multiSelectDisplay.getAttribute('data-values') || '[]') : [];
+            rowsData.push({ start: row.querySelector('.i-start').value, end: row.querySelector('.i-end').value, useful: row.querySelector('.i-useful').value, subject: row.querySelector('.i-subject').value, source: row.querySelector('.i-source').value, studyType: studyTypeValues, total: row.querySelector('.t-total').value, correct: row.querySelector('.t-correct').value, wrong: row.querySelector('.t-wrong').value, unanswered: row.querySelector('.t-unanswered').value, percent: row.querySelector('.t-percent').value });
+        });
+        const fullData = { header: headerData, rows: rowsData };
+        localStorage.setItem('myPlannerData_2025_Final_v2', JSON.stringify(fullData));
+    }
+
+    function loadData() {
+        let savedJSON = localStorage.getItem('myPlannerData_2025_Final_v2');
+        if(!savedJSON) savedJSON = localStorage.getItem('myPlannerData_2025_Final');
+        if(!savedJSON) savedJSON = localStorage.getItem('myPlannerData_2025_v2');
+        if (savedJSON) {
+            try {
+                const data = JSON.parse(savedJSON);
+                if(data.header) { document.getElementById('h-date').value = data.header.date || ''; document.getElementById('h-wake').value = data.header.wake || ''; document.getElementById('h-sleep').value = data.header.sleep || ''; }
+                const tableBody = document.getElementById("studyTable").getElementsByTagName('tbody')[0];
+                tableBody.innerHTML = "";
+                if(data.rows && data.rows.length > 0) { data.rows.forEach(rowData => addNewRow(rowData)); } else { addNewRow(); }
+                calculateSummary();
+            } catch (e) { console.error("Error loading data", e); addNewRow(); }
+        } else { addNewRow(); }
+    }
+
+    function clearAllData() { if(confirm("همه چیز پاک شود؟")) { localStorage.removeItem('myPlannerData_2025_Final_v2'); location.reload(); } }
+
+    function prepareForExport() {
+        document.querySelectorAll('.action-column, .add-btn-container, .export-container, .clock-widget').forEach(el => el.classList.add('hide-on-export'));
+        closeAllDropdowns();
+        document.body.classList.add('export-mode');
+        window.scrollTo(0, 0);
+    }
+
+    function restoreAfterExport() {
+        document.querySelectorAll('.action-column, .add-btn-container, .export-container, .clock-widget').forEach(el => el.classList.remove('hide-on-export'));
+        document.body.classList.remove('export-mode');
+    }
+
+    async function takeScreenshot() {
+  const btn = document.getElementById('imgBtn');
+  const oldText = btn ? btn.innerHTML : null;
+
+  try {
+    if (btn) {
+      btn.innerHTML = "<span>⏳ ساخت عکس...</span>";
+      btn.disabled = true;
+    }
+
+    await loadScript('html2canvas');
+
+    if (!window.html2canvas) throw new Error("html2canvas not loaded");
+
+    prepareForExport();
+
+    // صبر کوتاه برای اعمال استایل‌ها
+    await new Promise(r => setTimeout(r, 300));
+
+    const element = document.querySelector(".container") || document.body;
+    if (!element) throw new Error("container not found");
+
+    const fullWidth  = Math.max(element.scrollWidth, element.clientWidth, element.offsetWidth);
+    const fullHeight = Math.max(element.scrollHeight, element.clientHeight, element.offsetHeight);
+
+    const dpr = window.devicePixelRatio || 1;
+    let scale = Math.min(2, dpr);
+
+    // محدودیت امن برای موبایل
+    if (fullWidth * fullHeight * scale * scale > 12_000_000) {
+      scale = 1;
+    }
+
+    const canvas = await html2canvas(element, {
+      scale,
+      useCORS: true,
+      backgroundColor: "#ffffff",
+      scrollX: 0,
+      scrollY: -window.scrollY,
+      windowWidth: fullWidth,
+      windowHeight: fullHeight,
+      width: fullWidth,
+      height: fullHeight
+    });
+
+    // روش امن‌تر برای موبایل
+    if (canvas.toBlob) {
+      canvas.toBlob((blob) => {
+        if (!blob) throw new Error("toBlob failed");
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `MyPlan_${Date.now()}.jpg`;
+        link.click();
+        URL.revokeObjectURL(link.href);
+      }, "image/jpeg", 0.95);
+    } else {
+      const link = document.createElement("a");
+      link.href = canvas.toDataURL("image/jpeg", 0.95);
+      link.download = `MyPlan_${Date.now()}.jpg`;
+      link.click();
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("خطا در ساخت عکس.");
+  } finally {
+    restoreAfterExport();
+    if (btn) {
+      btn.innerHTML = oldText;
+      btn.disabled = false;
+    }
+  }
+}
+
+
+    async function exportPDF() {
+    const btn = document.getElementById('pdfBtn');
+    const oldText = btn.innerHTML;
+    btn.innerHTML = "<span>⏳ موتور PDF...</span>";
+    btn.disabled = true;
+    try {
+        await loadScript('html2pdf');
+        btn.innerHTML = "<span>📄 ساخت PDF...</span>";
+        prepareForExport();
+        setTimeout(() => {
+            const element = document.querySelector(".container");
+            const fullHeight = element.scrollHeight;
+            const fullWidth = element.scrollWidth;
+
+            const opt = {
+                margin: 0, // ✅ بدون مارجین
+                filename: `MyPlan_${new Date().getTime()}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: {
+                    scale: 3,
+                    useCORS: true,
+                    scrollY: -window.scrollY,
+                    windowWidth: fullWidth,
+                    windowHeight: fullHeight,
+                    width: fullWidth,
+                    height: fullHeight
+                },
+                jsPDF: {
+                    unit: 'px',
+                    format: [fullWidth, fullHeight], // ✅ درست
+                    orientation: fullWidth > fullHeight ? 'landscape' : 'portrait'
+                }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                restoreAfterExport();
+                btn.innerHTML = oldText;
+                btn.disabled = false;
+            }).catch(err => {
+                console.error(err);
+                alert("خطا در ساخت PDF.");
+                restoreAfterExport();
+                btn.innerHTML = oldText;
+                btn.disabled = false;
+            });
+        }, 800);
+    } catch (error) {
+        console.error(error);
+        alert("خطا در دانلود ابزار PDF. فایل‌ها رو دستی دانلود کن.");
+        btn.innerHTML = oldText;
+        btn.disabled = false;
+    }
+}
+
+window.onload = function() { startLiveClock(); loadData(); };
+
+<!-- ── PWA: ثبت نگهبان آفلاین ── -->
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then((reg) => console.log('✅ سرویس‌ورکر ثبت شد!', reg.scope))
+        .catch((err) => console.log('❌ خطا در ثبت سرویس‌ورکر:', err));
+    });
+  }
+
+
+
+</script>
+
+
+</body>
+</html>
